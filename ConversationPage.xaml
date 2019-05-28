@@ -1,0 +1,128 @@
+﻿<Page
+    x:Class="Messaging_for_Windows_on_ARM.ConversationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Messaging_for_Windows_on_ARM"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="DeviceStates" CurrentStateChanged="DeviceStates_CurrentStateChanged">
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Medium">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition MinHeight="48" Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="ScrollViewer">
+                <Setter Property="CanContentRenderOutsideBounds" Value="True"></Setter>
+            </Style>
+        </Grid.Resources>
+        <ListView SelectionMode="None" IsItemClickEnabled="False" Grid.Row="1" x:Name="ConversationList">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel VerticalAlignment="Bottom"></ItemsStackPanel>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="Padding" Value="0"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <local:MessageUserControl></local:MessageUserControl>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Grid Padding="20" Grid.Row="0" Background="{ThemeResource HeaderAcrylicBrush}">
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="Randon" Click="Randon_Click" Visibility="Collapsed">Click me</Button>
+                <StackPanel Spacing="10" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <PersonPicture Height="48" x:Name="ParticipantsPP" ProfilePicture="{x:Bind messagethread.ParticipantPhoto}"></PersonPicture>
+                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" HorizontalAlignment="Center" Text="{x:Bind messagethread.Participant}"></TextBlock>
+                </StackPanel>
+                <CommandBar OverflowButtonVisibility="Collapsed" Background="Transparent" Grid.Column="1">
+                    <AppBarButton Icon="Phone" x:Name="CallButton"></AppBarButton>
+                    <AppBarButton Icon="More">
+                        <AppBarButton.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Icon="Delete" Text="Delete"></MenuFlyoutItem>
+                            </MenuFlyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                </CommandBar>
+            </Grid>
+        </Grid>
+        <Grid Background="{ThemeResource HeaderAcrylicBrush}" Grid.Row="2">
+            <Grid.Resources>
+                <ThemeShadow x:Name="ChatBoxShadow"></ThemeShadow>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="48"/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="ChatBoxShadowCatcher"  HorizontalAlignment="Stretch"  Grid.ColumnSpan="3"></Grid>
+            <Button Margin="8" IsEnabled="False" BorderThickness="1" Background="Transparent" Style="{ThemeResource ButtonRevealStyle}">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Contact">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8CF;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Photo">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB9F;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Voice Recording">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF12E;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Location">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE139;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+                <SymbolIcon Symbol="Attach"></SymbolIcon>
+            </Button>
+            <TextBox AcceptsReturn="True" x:Name="MessageTB" ScrollViewer.HorizontalScrollMode="Disabled" TextWrapping="Wrap" Margin="8" Grid.Column="1" VerticalAlignment="Center" Shadow="{ThemeResource ChatBoxShadow}" PlaceholderText="Type your message" Style="{ThemeResource TextBoxStyle}">
+                <TextBox.Transform3D>
+                    <CompositeTransform3D TranslateZ="16"></CompositeTransform3D>
+                </TextBox.Transform3D>
+            </TextBox>
+            <Button IsRightTapEnabled="True" RightTapped="SendButton_RightTapped" Name="SendButton" Click="SendButton_Click" ToolTipService.ToolTip="Send (Alt+E)" Height="Auto" Grid.Column="2" IsEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Style="{ThemeResource AccentButtonStyle}">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Menu" Key="E"></KeyboardAccelerator>
+                </Button.KeyboardAccelerators>
+                <SymbolIcon Symbol="Send"></SymbolIcon>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>

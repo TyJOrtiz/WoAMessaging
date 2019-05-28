@@ -1,0 +1,52 @@
+﻿<UserControl
+    x:Class="Messaging_for_Windows_on_ARM.MessageUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App16"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid VerticalAlignment="Center">
+        <Grid.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem Text="Copy">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE16B;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="Forward">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF71A;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="Delete" Icon="Delete"></MenuFlyoutItem>
+            </MenuFlyout>
+        </Grid.ContextFlyout>
+        <Grid HorizontalAlignment="{x:Bind message.Alignment}">
+            <Grid.Resources>
+                <ThemeShadow x:Name="BackgroundShadow"></ThemeShadow>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.RowSpan="2" x:Name="ShadowCatcher"></Grid>
+            <Grid Height="10" Width="10" Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="{x:Bind message.Alignment}">
+                <Grid.Background>
+                    <SolidColorBrush Color="{x:Bind message.Color}"></SolidColorBrush>
+                </Grid.Background>
+            </Grid>
+            <Grid Margin="{x:Bind message.Margin}" Shadow="{ThemeResource BackgroundShadow}" HorizontalAlignment="{x:Bind message.Alignment}" CornerRadius="10" RequestedTheme="Dark">
+                <Grid.Transform3D>
+                    <CompositeTransform3D TranslateZ="32"></CompositeTransform3D>
+                </Grid.Transform3D>
+                <Grid.Background>
+                    <SolidColorBrush Color="{x:Bind message.Color}"></SolidColorBrush>
+                </Grid.Background>
+                <TextBlock Margin="10" Text="{x:Bind message.Body}" TextWrapping="Wrap"></TextBlock>
+            </Grid>
+            <TextBlock HorizontalAlignment="{x:Bind message.Alignment}" FontSize="12" Opacity="0.8" Text="{x:Bind message.DateTime}" Grid.Row="1" Margin="10,0,10,5"></TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>
